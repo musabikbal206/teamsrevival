@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revival - Takım & Amblem Kataloğu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a0e17;
+      --card-bg: #141b2d;
+      --card-border: #1f2a44;
+      --accent: #00e5ff;
+      --accent-glow: rgba(0, 229, 255, 0.25);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --gold: #f59e0b;
+      --stat-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(180deg, #101728 0%, rgba(10, 14, 23, 0.8) 100%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-title {
+      font-family: 'Teko', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #00e5ff, #38bdf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .badge {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .search-input {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      color: #fff;
+      font-size: 0.95rem;
+      min-width: 260px;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+      scrollbar-width: thin;
+    }
+
+    .tab-btn {
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #040810;
+      border-color: var(--accent);
+      font-weight: 700;
+      box-shadow: 0 0 12px var(--accent-glow);
+    }
+
+    main {
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 2rem;
+    }
+
+    .stats-bar-top {
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .team-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-3px);
+      border-color: #38bdf8;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-meta {
+      padding: 0.6rem 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-meta .year-badge {
+      background: #38bdf8;
+      color: #040810;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .emblems-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 1.25rem 1rem;
+      gap: 1rem;
+      background: radial-gradient(circle at center, rgba(30, 41, 59, 0.4) 0%, transparent 80%);
+      align-items: center;
+      position: relative;
+    }
+
+    .vs-divider {
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      background: #0f172a;
+      border: 1px solid var(--card-border);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Teko', sans-serif;
+      font-size: 0.9rem;
+      color: var(--accent);
+      z-index: 2;
+    }
+
+    .emblem-side {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+
+    .emblem-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: #0b1120;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emblem-wrapper img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+
+    .side-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .side-name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      line-height: 1.2;
+      color: #fff;
+      min-height: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-name.revival-name {
+      color: #38bdf8;
+    }
+
+    .team-stats {
+      padding: 1rem;
+      border-top: 1px solid var(--card-border);
+      background: #0d121f;
+    }
+    
+    .stat-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+    }
+    
+    .stat-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .stat-label {
+      width: 45px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    
+    .stat-bar-bg {
+      flex: 1;
+      height: 6px;
+      background: var(--card-bg);
+      border-radius: 3px;
+      margin: 0 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .stat-value {
+      width: 25px;
+      text-align: right;
+      font-weight: 700;
+      color: #fff;
+      font-family: 'Teko', sans-serif;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+    
+    .pwr-row {
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--card-border);
+    }
+    
+    .pwr-row .stat-label { color: var(--gold); }
+    .pwr-row .stat-value { color: var(--gold); font-size: 1.3rem; }
+    
+    .color-ofa { background: #38bdf8; }
+    .color-def { background: #10b981; }
+    .color-guc { background: #f97316; }
+    .color-hiz { background: #a855f7; }
+    .color-pwr { background: var(--gold); }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 1.25rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: #090d16;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-content">
+      <div class="top-bar">
+        <div class="brand">
+          <h1 class="brand-title">Revival</h1>
+          <span class="badge">Team Catalog</span>
+        </div>
+        <input type="text" id="searchInput" class="search-input" placeholder="Takım veya lig ara...">
+      </div>
+      <div class="filter-tabs" id="filterTabs"></div>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats-bar-top" id="statsBar">Yükleniyor...</div>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </main>
+
+  <footer>
+    Revival Oyundaki Takım & Gerçek Kulüp Kataloğu
+  </footer>
+
+  <script>
+    const toProxy = (url) => `https://wsrv.nl/?url=${encodeURIComponent(url)}&output=png&w=180`;
+
+    const TEAMS_DATA = [
+      // --- 2016 TAKIMLARI ---
+      { country: "Hollanda", league: "Eredivisie", revivalName: "Amsterdam Look", realName: "AFC Ajax", year: 2016, revivalLogo: "./ajax.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg"), stats: { ofa: 64, def: 67, guc: 63, hiz: 67, pwr: 70.3 } },
+      { country: "Rusya", league: "Premier League (RU)", revivalName: "Blue Navy", realName: "Zenit", year: 2016, revivalLogo: "./zenit.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/4/43/FC_Zenit_Saint_Petersburg_logo.svg"), stats: { ofa: 74, def: 71, guc: 61, hiz: 51, pwr: 77.1 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "FC Spurs", realName: "Tottenham", year: 2016, revivalLogo: "./totenham.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg"), stats: { ofa: 66, def: 69, guc: 57, hiz: 65, pwr: 75.3 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Fire Bird", realName: "Liverpool FC", year: 2016, revivalLogo: "./liverpool.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg"), stats: { ofa: 71, def: 71, guc: 64, hiz: 64, pwr: 78.8 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Ice Lion", realName: "Chelsea FC", year: 2016, revivalLogo: "./chelsea.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg"), stats: { ofa: 73, def: 78, guc: 66, hiz: 61, pwr: 92.0 } },
+      { country: "Hollanda", league: "Eredivisie", revivalName: "Knight Hoven", realName: "PSV Eindhoven", year: 2016, revivalLogo: "./eindhoven.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/0/05/PSV_Eindhoven.svg"), stats: { ofa: 64, def: 64, guc: 61, hiz: 69, pwr: 70.9 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "London Cruiser", realName: "Arsenal FC", year: 2016, revivalLogo: "./arsenal.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg"), stats: { ofa: 71, def: 81, guc: 60, hiz: 71, pwr: 86.8 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Man Angel", realName: "Manchester City", year: 2016, revivalLogo: "./mcity.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg"), stats: { ofa: 75, def: 81, guc: 64, hiz: 68, pwr: 87.5 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Mandeville", realName: "Manchester United", year: 2016, revivalLogo: "./munited.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg"), stats: { ofa: 73, def: 70, guc: 62, hiz: 53, pwr: 83.8 } },
+      { country: "Rusya", league: "Premier League (RU)", revivalName: "Red Soldier", realName: "CSKA Moskova", year: 2016, revivalLogo: "./cskamoskova.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/e/e0/PFC_CSKA_Moscow_logo.svg"), stats: { ofa: 69, def: 68, guc: 61, hiz: 64, pwr: 75.3 } },
+
+      // --- 2015 TAKIMLARI ---
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Anatolian Warriors", realName: "Sivasspor", year: 2015, revivalLogo: "./sivas.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/tr/8/80/Sivasspor.png"), stats: { ofa: 62, def: 63, guc: 53, hiz: 50, pwr: 63.1 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Dark Eagles", realName: "Beşiktaş JK", year: 2015, revivalLogo: "./besiktas.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/WCOIffPMnmzgN_ZwQwsj3g_500x500.png", stats: { ofa: 63, def: 68, guc: 61, hiz: 65, pwr: 74.3 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Flying Birds", realName: "Fenerbahçe SK", year: 2015, revivalLogo: "./fenerbahce.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/am1hqNcHXX7QHNzqOjT6qw_500x500.png", stats: { ofa: 64, def: 62, guc: 60, hiz: 61, pwr: 70.0 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "King of Jungle", realName: "Galatasaray SK", year: 2015, revivalLogo: "./galatasaray.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/XjWqAG8vQD_B6ffzIOan6g_500x500.png", stats: { ofa: 65, def: 65, guc: 61, hiz: 62, pwr: 74.4 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Northlanders", realName: "Trabzonspor", year: 2015, revivalLogo: "./trabzon.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/UeQMxw23XvY5aVBPvpwSpQ_500x500.png", stats: { ofa: 72, def: 67, guc: 58, hiz: 67, pwr: 71.3 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Snow Tigers", realName: "Kayserispor", year: 2015, revivalLogo: "./kayseri.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/tr/b/b3/Kayserispor_logosu.png"), stats: { ofa: 62, def: 58, guc: 55, hiz: 54, pwr: 53.6 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Rizespor", realName: "Çaykur Rizespor", year: 2015, revivalLogo: "./rize.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/8MmMkTYEYEp5nIVvAOwFIA_500x500.png", stats: { ofa: 63, def: 60, guc: 61, hiz: 58, pwr: 60.2 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Southern Falcons", realName: "Gaziantepspor", year: 2015, revivalLogo: "./gaziantep.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/tr/0/08/Gaziantepspor.png"), stats: { ofa: 59, def: 64, guc: 57, hiz: 63, pwr: 60.0 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Wild Crocs", realName: "Bursaspor", year: 2015, revivalLogo: "./bursa.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/tr/c/c5/Bursaspor_logo.png"), stats: { ofa: 62, def: 68, guc: 58, hiz: 62, pwr: 67.3 } },
+      { country: "Türkiye", league: "Süper Lig", revivalName: "Wind of Anatolia", realName: "Gençlerbirliği", year: 2015, revivalLogo: "./genclerbirligi.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/rFWUP6pLWcZHnfhQIhg9Dw_500x500.png", stats: { ofa: 61, def: 62, guc: 58, hiz: 69, pwr: 60.0 } },
+
+      { country: "İtalya", league: "Serie A", revivalName: "ACE Milano", realName: "AC Milan", year: 2015, revivalLogo: "./acmilan.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/d/d0/Logo_of_AC_Milan.svg"), stats: { ofa: 64, def: 71, guc: 60, hiz: 59, pwr: 71.4 } },
+      { country: "İtalya", league: "Serie A", revivalName: "ACF Firenze", realName: "ACF Fiorentina", year: 2015, revivalLogo: "./firenze.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/7/79/ACF_Fiorentina_2022.svg"), stats: { ofa: 64, def: 71, guc: 55, hiz: 60, pwr: 66.9 } },
+      { country: "İtalya", league: "Serie A", revivalName: "Torino Zebra", realName: "Juventus FC", year: 2015, revivalLogo: "./juventus.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/a/a8/Juventus_FC_-_logo_black_%28Italy%2C_2017%29.svg"), stats: { ofa: 67, def: 75, guc: 60, hiz: 55, pwr: 79.3 } },
+      { country: "İtalya", league: "Serie A", revivalName: "Wolf Roma", realName: "AS Roma", year: 2015, revivalLogo: "./roma.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/f/f7/AS_Roma_logo_%282017%29.svg"), stats: { ofa: 75, def: 71, guc: 59, hiz: 57, pwr: 74.5 } },
+      { country: "İtalya", league: "Serie A", revivalName: "Wyvern Milano", realName: "Inter Milan", year: 2015, revivalLogo: "./intermilan.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/0/05/FC_Internazionale_Milano_2021.svg"), stats: { ofa: 68, def: 72, guc: 61, hiz: 57, pwr: 72.9 } },
+      { country: "İtalya", league: "Serie A", revivalName: "FC Napoli", realName: "SSC Napoli", year: 2015, revivalLogo: "./napoli.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/b/ba/SSC_Napoli_2024_%28deep_blue_navy%29.svg"), stats: { ofa: 67, def: 69, guc: 57, hiz: 62, pwr: 69.2 } },
+
+      { country: "İspanya", league: "La Liga", revivalName: "AT Matador", realName: "Atlético Madrid", year: 2015, revivalLogo: "./atmadrid.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/f/f4/Atletico_Madrid_2017_logo.svg"), stats: { ofa: 63, def: 78, guc: 58, hiz: 61, pwr: 78.9 } },
+      { country: "İspanya", league: "La Liga", revivalName: "Bat Knight", realName: "Valencia CF", year: 2015, revivalLogo: "./valencia.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/c/ce/Valenciacf.svg"), stats: { ofa: 64, def: 70, guc: 58, hiz: 66, pwr: 73.1 } },
+      { country: "İspanya", league: "La Liga", revivalName: "Cataluna King", realName: "FC Barcelona", year: 2015, revivalLogo: "./barcelona.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/paYnEE8hcrP96neHRNofhQ_500x500.png", stats: { ofa: 72, def: 73, guc: 60, hiz: 60, pwr: 85.0 } },
+      { country: "İspanya", league: "La Liga", revivalName: "King Sociedad", realName: "Real Sociedad", year: 2015, revivalLogo: "./sociedad.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/f/f1/Real_Sociedad_logo.svg"), stats: { ofa: 63, def: 70, guc: 53, hiz: 60, pwr: 66.6 } },
+      { country: "İspanya", league: "La Liga", revivalName: "Queen Madrid", realName: "Real Madrid CF", year: 2015, revivalLogo: "./rmadrid.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/Th4fAVAZeCJWRcKoLW7koA_500x500.png", stats: { ofa: 72, def: 76, guc: 63, hiz: 66, pwr: 86.8 } },
+
+      { country: "Fransa", league: "Ligue 1", revivalName: "Lyon Lily", realName: "Olympique Lyonnais", year: 2015, revivalLogo: "./lyon.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/c/c6/Olympique_Lyonnais.svg"), stats: { ofa: 57, def: 64, guc: 61, hiz: 53, pwr: 63.9 } },
+      { country: "Fransa", league: "Ligue 1", revivalName: "Marseille Rose", realName: "Olympique de Marseille", year: 2015, revivalLogo: "./marsilya.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/d/d8/Olympique_Marseille_logo.svg"), stats: { ofa: 67, def: 64, guc: 60, hiz: 58, pwr: 65.9 } },
+      { country: "Fransa", league: "Ligue 1", revivalName: "Paris Iris", realName: "Paris Saint-Germain", year: 2015, revivalLogo: "./psg.png", realLogo: "https://ssl.gstatic.com/onebox/media/sports/logos/optimized/mcpMspef1hwHwi9qrfp4YQ_500x500.png", stats: { ofa: 77, def: 71, guc: 64, hiz: 56, pwr: 82.1 } },
+
+      { country: "Portekiz", league: "Primeira Liga", revivalName: "FC Sapphire", realName: "FC Porto", year: 2015, revivalLogo: "./porto.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/f/f1/FC_Porto.svg"), stats: { ofa: 63, def: 66, guc: 58, hiz: 60, pwr: 66.9 } },
+      { country: "Portekiz", league: "Primeira Liga", revivalName: "SL Ruby", realName: "SL Benfica", year: 2015, revivalLogo: "./benfica.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/a/a2/SL_Benfica_logo.svg"), stats: { ofa: 63, def: 63, guc: 56, hiz: 61, pwr: 62.3 } },
+
+      { country: "Hollanda", league: "Eredivisie", revivalName: "Amsterdam Look", realName: "AFC Ajax", year: 2015, revivalLogo: "./ajax.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/7/79/Ajax_Amsterdam.svg"), stats: { ofa: 59, def: 63, guc: 55, hiz: 59, pwr: 61.3 } },
+      { country: "Hollanda", league: "Eredivisie", revivalName: "Knight Hoven", realName: "PSV Eindhoven", year: 2015, revivalLogo: "./eindhoven.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/0/05/PSV_Eindhoven.svg"), stats: { ofa: 63, def: 62, guc: 55, hiz: 56, pwr: 64.5 } },
+
+      { country: "Almanya", league: "Bundesliga", revivalName: "Black Lion", realName: "Bayer 04 Leverkusen", year: 2015, revivalLogo: "./leverkusen.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/5/59/Bayer_04_Leverkusen_logo.svg"), stats: { ofa: 68, def: 72, guc: 61, hiz: 56, pwr: 73.0 } },
+      { country: "Almanya", league: "Bundesliga", revivalName: "Red Bear", realName: "FC Bayern München", year: 2015, revivalLogo: "./bayernmunchen.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/1/1b/FC_Bayern_M%C3%BCnchen_logo_%282017%29.svg"), stats: { ofa: 71, def: 74, guc: 61, hiz: 55, pwr: 86.7 } },
+      { country: "Almanya", league: "Bundesliga", revivalName: "Shark 04", realName: "FC Schalke 04", year: 2015, revivalLogo: "./schalke04.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/6/6d/FC_Schalke_04_Logo.svg"), stats: { ofa: 66, def: 71, guc: 57, hiz: 66, pwr: 73.2 } },
+      { country: "Almanya", league: "Bundesliga", revivalName: "Yellow Hornet", realName: "Borussia Dortmund", year: 2015, revivalLogo: "./dortmund.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/6/67/Borussia_Dortmund_logo.svg"), stats: { ofa: 74, def: 71, guc: 62, hiz: 64, pwr: 78.5 } },
+
+      { country: "Rusya", league: "Premier League (RU)", revivalName: "Blue Navy", realName: "Zenit Saint Petersburg", year: 2015, revivalLogo: "./zenit.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/commons/4/43/FC_Zenit_Saint_Petersburg_logo.svg"), stats: { ofa: 65, def: 68, guc: 58, hiz: 53, pwr: 69.6 } },
+      { country: "Rusya", league: "Premier League (RU)", revivalName: "Red Soldier", realName: "PFC CSKA Moskova", year: 2015, revivalLogo: "./cskamoskova.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/e/e0/PFC_CSKA_Moscow_logo.svg"), stats: { ofa: 64, def: 70, guc: 58, hiz: 59, pwr: 68.8 } },
+
+      { country: "İngiltere", league: "Premier League", revivalName: "FC Spurs", realName: "Tottenham Hotspur FC", year: 2015, revivalLogo: "./totenham.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg"), stats: { ofa: 64, def: 67, guc: 57, hiz: 63, pwr: 67.9 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Fire Bird", realName: "Liverpool FC", year: 2015, revivalLogo: "./liverpool.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg"), stats: { ofa: 65, def: 70, guc: 57, hiz: 62, pwr: 73.8 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Ice Lion", realName: "Chelsea FC", year: 2015, revivalLogo: "./chelsea.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/c/cc/Chelsea_FC.svg"), stats: { ofa: 67, def: 75, guc: 60, hiz: 63, pwr: 80.1 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "London Cruiser", realName: "Arsenal FC", year: 2015, revivalLogo: "./arsenal.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/5/53/Arsenal_FC.svg"), stats: { ofa: 65, def: 76, guc: 57, hiz: 63, pwr: 78.3 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Man Angel", realName: "Manchester City FC", year: 2015, revivalLogo: "./mcity.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg"), stats: { ofa: 69, def: 72, guc: 62, hiz: 65, pwr: 78.2 } },
+      { country: "İngiltere", league: "Premier League", revivalName: "Mandeville", realName: "Manchester United FC", year: 2015, revivalLogo: "./munited.png", realLogo: toProxy("https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg"), stats: { ofa: 70, def: 68, guc: 65, hiz: 70, pwr: 74.4 } }
+    ];
+
+    let activeFilter = "ALL";
+    let searchQuery = "";
+
+    function initFilters() {
+      const countries = ["ALL", ...new Set(TEAMS_DATA.map(t => t.country))];
+      const tabsContainer = document.getElementById("filterTabs");
+      
+      countries.forEach(c => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${c === "ALL" ? "active" : ""}`;
+        btn.textContent = c === "ALL" ? "Tüm Ligler / Ülkeler" : c;
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeFilter = c;
+          renderCards();
+        });
+        tabsContainer.appendChild(btn);
+      });
+    }
+
+    const MAX_STAT = 100;
+
+    function renderCards() {
+      const grid = document.getElementById("cardsGrid");
+      const stats = document.getElementById("statsBar");
+
+      const filtered = TEAMS_DATA.filter(t => {
+        const matchesFilter = activeFilter === "ALL" || t.country === activeFilter;
+        const q = searchQuery.toLowerCase().trim();
+        return matchesFilter && (!q || 
+          t.revivalName.toLowerCase().includes(q) || 
+          t.realName.toLowerCase().includes(q) || 
+          t.country.toLowerCase().includes(q) ||
+          t.year.toString().includes(q));
+      });
+
+      stats.textContent = `Toplam ${filtered.length} takım listeleniyor`;
+      grid.innerHTML = "";
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #64748b;">Aramanıza uygun takım bulunamadı.</div>`;
+        return;
+      }
+
+      filtered.forEach(team => {
+        const card = document.createElement("div");
+        card.className = "team-card";
+
+        const revivalLogoContent = team.revivalLogo
+          ? `<img src="${team.revivalLogo}" alt="${team.revivalName}" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-badge\\'>${team.revivalName.slice(0,3).toUpperCase()}</div>'">`
+          : `<div class="placeholder-badge" style="font-size:1.4rem">${team.revivalName.slice(0, 3).toUpperCase()}</div>`;
+
+        const realLogoContent = team.realLogo
+          ? `<img src="${team.realLogo}" alt="${team.realName}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'placeholder-badge\\' style=\\'color:#cbd5e1\\'>${team.realName.slice(0,3).toUpperCase()}</div>'">`
+          : `<div class="placeholder-badge" style="color:#cbd5e1; font-size:1.4rem">${team.realName.slice(0, 3).toUpperCase()}</div>`;
+
+        card.innerHTML = `
+          <div class="card-meta">
+            <span>${team.country}</span>
+            <span class="year-badge">${team.year}</span>
+          </div>
+          <div class="emblems-comparison">
+            <div class="vs-divider">VS</div>
+            <div class="emblem-side">
+              <span class="side-label">Revival</span>
+              <div class="emblem-wrapper">${revivalLogoContent}</div>
+              <div class="side-name revival-name">${team.revivalName}</div>
+            </div>
+            <div class="emblem-side">
+              <span class="side-label">Orijinal Kulüp</span>
+              <div class="emblem-wrapper">${realLogoContent}</div>
+              <div class="side-name">${team.realName}</div>
+            </div>
+          </div>
+          
+          <div class="team-stats">
+            <div class="stat-row">
+              <span class="stat-label">HÜCUM</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill color-ofa" style="width: ${(team.stats.ofa / MAX_STAT) * 100}%"></div></div>
+              <span class="stat-value">${team.stats.ofa}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">DEFANS</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill color-def" style="width: ${(team.stats.def / MAX_STAT) * 100}%"></div></div>
+              <span class="stat-value">${team.stats.def}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">GÜÇ</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill color-guc" style="width: ${(team.stats.guc / MAX_STAT) * 100}%"></div></div>
+              <span class="stat-value">${team.stats.guc}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">HIZ</span>
+              <div class="stat-bar-bg"><div class="stat-bar-fill color-hiz" style="width: ${(team.stats.hiz / MAX_STAT) * 100}%"></div></div>
+              <span class="stat-value">${team.stats.hiz}</span>
+            </div>
+            <div class="stat-row pwr-row">
+              <span class="stat-label">PWR</span>
+              <div class="stat-bar-bg" style="background:#2d1b08"><div class="stat-bar-fill color-pwr" style="width: ${(team.stats.pwr / MAX_STAT) * 100}%"></div></div>
+              <span class="stat-value">${team.stats.pwr.toFixed(1)}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderCards();
+    });
+
+    initFilters();
+    renderCards();
+  </script>
+</body>
+</html>
